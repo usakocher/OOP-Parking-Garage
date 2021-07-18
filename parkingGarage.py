@@ -15,7 +15,7 @@ class ParkingGarage:
         if self.tickets == []:
             print(f'Sorry no more spaces available.')
         else:
-            self.tickets.sort()
+            self.tickets = sorted(self.tickets, key = int)
             ticket = self.tickets.pop(0)
             print(f'Your ticket number is {ticket}')
             self.currentTicket[ticket] = False
@@ -31,12 +31,12 @@ class ParkingGarage:
                     if payQuest.lower() == 'y':
                         paid = input('Enter anything to pay: ')
                         self.paying(ticket)
-                        break
+                        return True
                     elif payQuest.lower() == 'n':
-                        break
+                        return False
                     else:
                         print('That is not a valid input. Please try again')
-                        break
+                        return False
             else:
                 print(f'{ticket} is not a valid ticket.')
                 break
@@ -49,10 +49,12 @@ class ParkingGarage:
         while True:
             if self.checkTicket(ticket):
                 if self.currentTicket[ticket] == False:
-                    self.payForParking(ticket)
-                    del self.currentTicket[ticket]
-                    self.tickets.append(ticket)
-                    break
+                    if self.payForParking(ticket) == True:
+                        del self.currentTicket[ticket]
+                        self.tickets.append(ticket)
+                        break
+                    else:
+                        break
                 else:
                     print('Your ticket has already been paid.\nThank you, have a nice day!')
                     self.tickets.append(ticket)
@@ -80,5 +82,5 @@ class ParkingGarage:
 
 
 
-garage = ParkingGarage(5)
+garage = ParkingGarage(15)
 garage.run()
